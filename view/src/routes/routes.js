@@ -4,11 +4,13 @@ import DashBoard from "../components/Dashboard";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import Auth from '../utils/Auth'
+import WordsView from '../views/WordsView'
 
 
 export default function Routes() {
     return (
         <Switch>
+            <Route path="/" component={WordsView}/>
             <RouteRegisteration path="/signin" component={SignIn} />
             <RouteRegisteration path="/signup" component={SignUp} />
             <RouteProtected path="/dashboard" component={DashBoard} />

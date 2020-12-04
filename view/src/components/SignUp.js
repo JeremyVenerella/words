@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Auth from '../utils/Auth';
+import {signup} from './authApi';
 
 function Copyright() {
   return (
@@ -47,7 +49,26 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const classes = useStyles();
+  const auth = useContext(Auth);
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    const res = await signup({email,password})
+    if (res.data.auth){
+      auth.setAuth(true);
+    }
+  }
+
+  const handleChange = (e) =>{
+    if(e.target.name === 'email'){
+      setEmail(e.target.value);
+    }else if(e.target.name === 'password'){
+      setPassword(e.target.value);
+    }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -61,29 +82,6 @@ export default function SignUp() {
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -93,6 +91,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -105,6 +104,7 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleChange}
               />
             </Grid>
             <Grid item xs={12}>
@@ -120,6 +120,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSignUp}
           >
             Sign Up
           </Button>

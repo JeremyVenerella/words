@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Auth from '../utils/Auth'
+import Auth from '../utils/Auth';
+import {signin} from './authApi';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -47,11 +49,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const classes = useStyles();
+  const auth = useContext(Auth);
 
-  const auth = React.useContext(Auth);
-  const handleSignIn = () => {
-    auth.setAuth(true);
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    const res = await signin({email,password})
+    if (res.data.auth){
+      auth.setAuth(true);
+    }
+    //auth.setAuth(true);
+  }
+
+  const handleOnChange = (e) =>{
+    if(e.target.name === 'email'){
+      setEmail(e.target.value);
+    }
+    else if(e.target.name === 'password'){
+      setPassword(e.target.value);
+    }
   }
 
   return (
@@ -75,6 +93,7 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange = {handleOnChange}
           />
           <TextField
             variant="outlined"
@@ -86,6 +105,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange = {handleOnChange}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
