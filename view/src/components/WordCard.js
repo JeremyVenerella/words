@@ -1,33 +1,54 @@
 import React, { useContext, useEffect, useState } from "react";
 import { getTts } from "./authApi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 /*  eslint-disable  jsx-a11y/anchor-is-valid */
 
 export default function WordCard(props) {
-  console.log("props", props.word);
   let word = props.word;
-
+  
   const handleGetTts = async (e) => {
     const res = await getTts({
-        params: {
-          word: 'testing'
-        }
-      }).then(response => {
-        // var snd = new Audio("data:audio/wav;base64," + base64string);
-        // snd.play();
-          console.log('resStatus', response.data.sound);
+      params: {
+        word:
+          word.phonetic +
+          ". For example. " +
+          word.phonetic +
+          word.example.replace(word.word, ""),
+      },
+    })
+      .then((response) => {
+          var snd = new Audio("data:audio/mp3;base64," + response.data.sound);
+          snd.play();
+      })
+      .catch((err) => {
+        console.log("TTSerr", err);
       });
   };
-  useEffect(() => {
-    handleGetTts();
-  }, []);
 
+  const handleClick = (e) => {    
+    handleGetTts();
+  }
 
   return (
     <div className="card mt-5">
       <div className="card-content">
         <div className="content">
-          <div className="carHeader">
-            <h1>{word.word}</h1>
+          <div className="carHeader columns">
+          <div className="column is-one-quarter">
+              
+            </div>
+            <div  className="column">
+              <h1>{word.word}</h1>
+            </div>
+            <div className="column is-one-quarter">
+              <FontAwesomeIcon
+                className="playButton "
+                size="3x"
+                icon={faPlayCircle}
+                onClick={handleClick}
+              />
+            </div>
           </div>
 
           <h3 className="has-text-justified">{word.type}</h3>
@@ -44,7 +65,11 @@ export default function WordCard(props) {
           </div>
         </div>
       </div>
-      <footer className="card-footer"></footer>
+      <footer className="card-footer">
+        <div className="m-5 ">
+          <p>Ex. {word.example}</p>
+        </div>
+      </footer>
     </div>
   );
 }

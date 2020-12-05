@@ -41,3 +41,11 @@
 .carHeader{
   border-bottom: 2px solid rgb(231, 231, 231);
 }
+
+.playButton:hover{
+  color: lightskyblue;
+  cursor: pointer;
+}
+
+.searchfield{
+}

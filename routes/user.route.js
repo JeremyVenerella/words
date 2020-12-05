@@ -68,19 +68,6 @@ router.get("/signout", (req, res) => {
 });
 
 router.get("/api/getAllWords", async (req, res) => {
-  const adminID = req.session.user;
-  console.log("adminID", adminID);
-  try {
-    const admin = await Admin.findAdmin(adminID);
-    console.log("admin", admin);
-  } catch (error) {
-    console.log("Er: ", error);
-  }
-
-  //const admin = await Admin.findAdmin(req.session.user);
-  //console.log(req.session.user);
-
-  //console.log(req.session.user);
   const words = await Word.find();
   res.json({
     word: words,
@@ -136,7 +123,7 @@ router.get("/tts", async (req, res) => {
     const request = {
       input: { text: text },
       // Select the language and SSML voice gender (optional)
-      voice: { languageCode: "en-US", ssmlGender: "NEUTRAL" },
+      voice: { languageCode: "hi-IN", ssmlGender: "FEMALE" },
       // select the type of audio encoding
       audioConfig: {
            audioEncoding: "MP3"
@@ -145,15 +132,13 @@ router.get("/tts", async (req, res) => {
     const client = new gtts.TextToSpeechClient();
     const [response] = await client.synthesizeSpeech(request);
     let buff = response.audioContent;
-    console.log('here');
     let base64data = buff.toString('base64');
-    console.log('b64', base64data);
     res.json({
         sound: base64data,
     })
 
   } catch (error) {
-     res.json(req.body)
+     console.log(error);
   }
 });
 

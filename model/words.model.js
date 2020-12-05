@@ -8,6 +8,12 @@ const wordsSchema = mongoose.Schema({
     type: {
         type: String,
     },
+    example: {
+        type: String,
+    },
+    phonetic: {
+        type: String,
+    },
 });
 
 
