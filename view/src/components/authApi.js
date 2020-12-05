@@ -26,6 +26,11 @@ const getAllWords = async (user) => {
     return res;
 }
 
+const getTts = async (params) => {
+    const res = await axios.get("/tts", params);
+    return res;
+}
+
 const postWord = async (user) => {
     const res = await axios.post("/postWord", user);
     return res;
@@ -43,4 +48,5 @@ export {
     getAllWords,
     postWord,
     postAdmin,
+    getTts,
 }

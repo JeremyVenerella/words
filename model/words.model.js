@@ -4,9 +4,7 @@ const wordsSchema = mongoose.Schema({
     word: {
         type: String,
     },
-    definition: {
-        type: String,
-    },
+    definition: [String],
     type: {
         type: String,
     },

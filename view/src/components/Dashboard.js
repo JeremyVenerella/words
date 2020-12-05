@@ -5,9 +5,9 @@ import { signout, postWord, getAllWords, postAdmin } from "./authApi";
 export default function DashBoard() {
   const auth = useContext(Auth);
   const [words, setWords] = useState([]);
-  const [word, setWord] = useState();
-  const [type, setType] = useState();
-  const [definition, setDefinition] = useState();
+  const [word, setWord] = useState("");
+  const [type, setType] = useState("");
+  const [definition, setDefinition] = useState("");
 
   const handleLogout = async () => {
     const res = await signout();
@@ -16,9 +16,13 @@ export default function DashBoard() {
 
   const handlePostWord = async (e) => {
     e.preventDefault();
+
+    let arr = definition.split(",");
+    arr = arr.map((w) => w.trim());
+    console.log("arr", arr);
     const res = await postWord({
       word: word,
-      definition: definition,
+      definition: arr,
       type: type,
     }).then((r) => {
       setWord("");
@@ -82,7 +86,7 @@ export default function DashBoard() {
         </div>
 
         <div className="column mt-5 mr-1">
-          <table className="table is-striped is-narrow is-hoverable is-fullwidth mt-2">
+          <table className="table is-striped  is-hoverable is-fullwidth mt-2">
             <tbody>
               <tr>
                 <th>Words</th>
@@ -94,7 +98,17 @@ export default function DashBoard() {
                   <tr key={idx}>
                     <td>{word.word}</td>
                     <td>{word.type}</td>
-                    <td>{word.definition}</td>
+                    <td className="content">
+                      <ol className="mt-0" type="1">
+                        {word.definition.map((def, idx) => {
+                          return (
+                            <li className="centerBlock" key={idx}>
+                             {def}
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    </td>
                   </tr>
                 );
               })}

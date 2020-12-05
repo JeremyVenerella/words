@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import WordCard from "../components/WordCard";
+import { getAllWords } from "../components/authApi";
 
 export default function WordsView() {
+  const [words, setWords] = useState([]);
+
+  const handleGetAllWords = async (e) => {
+    const res = await getAllWords();
+    if (res.status === 200) {
+      console.log("HERE");
+      setWords(res.data.word);
+    }
+  };
+
+  useEffect(() => {
+    handleGetAllWords();
+  }, []);
+
   return (
-    <section class="hero is-primary">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">NicoleSWords</h1>
+    <div>
+      <section className="hero is-primary">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title">NicoleSWords</h1>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <section>
+        <div className="cardSize">
+          {words.map((w, idx) => (
+            <WordCard key={idx} word={w} />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

@@ -10,7 +10,7 @@ import WordsView from '../views/WordsView'
 export default function Routes() {
     return (
         <Switch>
-            <Route path="/" component={WordsView}/>
+            <Route exact path="/" component={WordsView}/>
             <RouteRegisteration path="/signin" component={SignIn} />
             <RouteRegisteration path="/signup" component={SignUp} />
             <RouteProtected path="/dashboard" component={DashBoard} />
