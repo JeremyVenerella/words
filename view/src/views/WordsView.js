@@ -48,10 +48,11 @@ export default function WordsView() {
                   <option>Noun</option>
                   <option>Pronoun</option>
                   <option>Verb</option>
-                  <option>Adjective</option>
                   <option>Adverb</option>
+                  <option>Adjective</option>
                   <option>Preposition</option>
                   <option>Conjunction</option>
+                  <option>No Clue</option>
                 </select>
               </span>
             </p>

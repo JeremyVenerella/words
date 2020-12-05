@@ -5,7 +5,7 @@ const User = require("../model/user.model");
 const Word = require("../model/words.model");
 const Admin = require("../model/admin.model");
 const gtts = require("@google-cloud/text-to-speech");
-const fs = require('fs');
+const fs = require("fs");
 
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
@@ -116,6 +116,44 @@ router.post("/api/postAdmin", async (req, res) => {
     });
 });
 
+router.put("/api/putWord", async (req, res) => {
+  const adminID = req.session.user;
+  console.log('query', req.body.params.wordId);
+  console.log('body', req.body.data);
+  const admin = await Admin.findAdmin(adminID);
+  console.log("PUT");
+//   if (admin) {
+    try {
+        let word = await Word.findById(req.body.params.wordId).exec();
+        word.set(req.body.data);
+        let result = await word.save();
+        res.send(result);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+//   }
+  return;
+});
+
+router.delete("/api/deleteWord", async (req, res) => {
+    const adminID = req.session.user;
+    console.log('query', req.query.wordId);
+    console.log('body', req.body);
+    const admin = await Admin.findAdmin(adminID);
+    console.log("PUT");
+  //   if (admin) {
+      try {
+          let result = await Word.findByIdAndRemove(req.query.wordId).exec();
+          res.send(result);
+      } catch (error) {
+          console.log(error);
+          res.status(500).send(error);
+      }
+  //   }
+    return;
+  });
+
 router.get("/tts", async (req, res) => {
   try {
     const text = req.query.word;
@@ -126,19 +164,18 @@ router.get("/tts", async (req, res) => {
       voice: { languageCode: "hi-IN", ssmlGender: "FEMALE" },
       // select the type of audio encoding
       audioConfig: {
-           audioEncoding: "MP3"
-         },      
+        audioEncoding: "MP3",
+      },
     };
     const client = new gtts.TextToSpeechClient();
     const [response] = await client.synthesizeSpeech(request);
     let buff = response.audioContent;
-    let base64data = buff.toString('base64');
+    let base64data = buff.toString("base64");
     res.json({
-        sound: base64data,
-    })
-
+      sound: base64data,
+    });
   } catch (error) {
-     console.log(error);
+    console.log(error);
   }
 });
 

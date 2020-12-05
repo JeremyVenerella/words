@@ -40,6 +40,19 @@ const postAdmin = async (user) => {
     const res = await axios.post("/api/postAdmin", user);
     return res;
 }
+
+const putWord = async (user) => {
+    console.log('user',user);
+    const res = await axios.put("/api/putWord", user);
+    return res;
+}
+
+const deleteWord = async (user) => {
+    console.log('user',user);
+    const res = await axios.delete("/api/deleteWord", user);
+    return res;
+}
+
 export {
     signin,
     signup,
@@ -49,4 +62,6 @@ export {
     postWord,
     postAdmin,
     getTts,
+    putWord,
+    deleteWord,
 }

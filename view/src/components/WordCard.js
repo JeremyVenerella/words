@@ -6,15 +6,15 @@ import { faPlayCircle } from "@fortawesome/free-solid-svg-icons";
 
 export default function WordCard(props) {
   let word = props.word;
-  
+
   const handleGetTts = async (e) => {
     const res = await getTts({
       params: {
         word:
           word.phonetic +
-          ". For example. " +
-          word.phonetic +
-          word.example.replace(word.word, ""),
+          ". For example. "
+           +
+          word.example.replace(word.word, word.phonetic),
       },
     })
       .then((response) => {
